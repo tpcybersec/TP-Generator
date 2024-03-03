@@ -9,3 +9,4 @@
 !/TP_Generator/
 !/TP_Generator/__init__.py
 !/TP_Generator/AttackTypes.py
+!/TP_Generator/MFA_Generator.py
