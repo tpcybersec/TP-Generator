@@ -2,7 +2,7 @@ import setuptools
 
 setuptools.setup(
 	name="TP_Generator",
-	version="2024.3.3",
+	version="2024.4.5",
 	author="TP Cyber Security",
 	license="MIT",
 	author_email="tpcybersec2023@gmail.com",
@@ -16,6 +16,6 @@ setuptools.setup(
 		"Programming Language :: Python :: 2",
 		"Programming Language :: Python :: Implementation :: Jython"
 	],
-	keywords=["TPCyberSec", "TP-Generator", "Sniper Attack", "Batteringram Attack", "Pitchfork Attack", "Clusterbomb Attack", "TOTP/ HOTP Generate"],
+	keywords=["TPCyberSec", "TP-Generator", "Sniper Attack", "Batteringram Attack", "Pitchfork Attack", "Clusterbomb Attack", "TOTP/ HOTP Generate", "UUID1"],
 	packages=["TP_Generator"],
 )
