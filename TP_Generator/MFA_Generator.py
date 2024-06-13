@@ -1,11 +1,11 @@
 # Time-based One-Time Password
 def TOTP(secretKey, digits=6, period=30):
-	import hashlib, hmac, base64, time
+	import hashlib, hmac, base64, time, binascii
 
 	key = base64.b32decode(secretKey)
 
 	timestamp = int(time.time())
-	message = bytes.fromhex(hex(int(timestamp / period))[2:].rjust(16, "0"))
+	message = binascii.unhexlify(hex(int(timestamp / period))[2:].rjust(16, "0"))
 
 	hmac = hmac.new(key, message, hashlib.sha1).hexdigest()
 
@@ -20,11 +20,11 @@ def TOTP(secretKey, digits=6, period=30):
 
 # HMAC-based One-Time Password
 def HOTP(secretKey, counter, digits=6):
-	import hashlib, hmac, base64
+	import hashlib, hmac, base64, binascii
 
 	key = base64.b32decode(secretKey)
 
-	message = bytes.fromhex(hex(int(counter))[2:].rjust(16, "0"))
+	message = binascii.unhexlify(hex(int(counter))[2:].rjust(16, "0"))
 
 	hmac = hmac.new(key, message, hashlib.sha1).hexdigest()
 

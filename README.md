@@ -35,6 +35,9 @@ from TP_Generator import AttackTypes, MFA_Generator, Bruteforcer_List
 ```
 
 ## CHANGELOG
+#### [TP-Generator v2024.6.13](https://github.com/truocphan/TP-Generator/tree/2024.6.13)
+- **Updated**: _MFA_Generator_: Fixed error generating **TOTP**, **HOTP** from jython
+
 #### [TP-Generator v2024.4.5](https://github.com/truocphan/TP-Generator/tree/2024.4.5)
 - **New**: _Bruteforcer_List_: **UUID1**
 
