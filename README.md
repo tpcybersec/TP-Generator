@@ -29,6 +29,7 @@ python setup.py install
 ```
 
 ## Basic Usage
+#### Generating testcases for the Sniper attack
 ```
 from TP_Generator import AttackTypes
 
@@ -47,12 +48,14 @@ Payloads = [
 for testcases in AttackTypes.Sniper(InjectionPoints, Payloads):
 	print(testcases)
 
+# OUTPUT:
 # {'RequestBody||id': "' AND '1'='1"}
 # {'RequestBody||id': "' AND '1'='0"}
 # {'RequestBody||name': "' AND '1'='1"}
 # {'RequestBody||name': "' AND '1'='0"}
 ```
 
+#### Generating testcases for the Batteringram attack
 ```
 from TP_Generator import AttackTypes
 
@@ -71,10 +74,12 @@ Payloads = [
 for testcases in AttackTypes.Batteringram(InjectionPoints, Payloads):
 	print(testcases)
 
+# OUTPUT:
 # {'RequestBody||id': "' AND '1'='1", 'RequestBody||name': "' AND '1'='1"}
 # {'RequestBody||id': "' AND '1'='0", 'RequestBody||name': "' AND '1'='0"}
 ```
 
+#### Generating testcases for the Pitchfork attack
 ```
 from TP_Generator import AttackTypes
 
@@ -97,10 +102,12 @@ Payloads = [
 for testcases in AttackTypes.Pitchfork(InjectionPoints, Payloads):
 	print(testcases)
 
+# OUTPUT:
 # {'RequestBody||id': "' AND '1'='1", 'RequestBody||name': "' OR '1'='1"}
 # {'RequestBody||id': "' AND '1'='0", 'RequestBody||name': "' OR '1'='0"}
 ```
 
+#### Generating testcases for the Clusterbomb attack
 ```
 from TP_Generator import AttackTypes
 
@@ -124,6 +131,7 @@ Payloads = [
 for testcases in AttackTypes.Clusterbomb(InjectionPoints, Payloads):
 	print(testcases)
 
+# OUTPUT:
 # {'RequestBody||id': "' AND '1'='1", 'RequestBody||name': "' OR '1'='1"}
 # {'RequestBody||id': "' AND '1'='1", 'RequestBody||name': "' OR '1'='0"}
 # {'RequestBody||id': "' AND '1'='0", 'RequestBody||name': "' OR '1'='1"}
@@ -132,20 +140,34 @@ for testcases in AttackTypes.Clusterbomb(InjectionPoints, Payloads):
 # {'RequestBody||id': "' && '1'='1", 'RequestBody||name': "' OR '1'='0"}
 ```
 
+#### Generating the TOTP, HOTP code
 ```
 from TP_Generator import MFA_Generator
 
 print(MFA_Generator.TOTP("JBSWY3DPEHPK3PXP"))
+# OUTPUT: 862642
+
 print(MFA_Generator.HOTP("JBSWY3DPEHPK3PXP", 1))
+# OUTPUT: 996554
 ```
 
+#### Generating the WordPress Nonce for unauthenticated users with wp-rest action
 ```
 from TP_Generator import Nonce_Generator
 
-print(Nonce_Generator.WordPress_Nonce("rest"))
+action = "wp-rest"
+NONCE_KEY = "Y9(H0]_u8BA:^or^<^4>AM@EkgnAm`{Mpsq*H!Z-?8 OHe6ITmPY6kQSai)y3w{}"
+NONCE_SALT = "xV&%-Ji<,`Clp+|bqt9<c%JrGpq!EiMy///`z0+<D1F<E%H14mha9Csm<TH;~TfH"
+
+print(Nonce_Generator.WordPress_Nonce(nonce_action=action, WORDPRESS_NONCE_KEY=NONCE_KEY, WORDPRESS_NONCE_SALT=NONCE_SALT))
+# OUTPUT: ac06630f78
 ```
 
 ## CHANGELOG
+#### [TP-Generator v2024.8.10](https://github.com/truocphan/TP-Generator/tree/2024.8.10)
+- **Updated**: _AttackTypes_: **Sniper**, **Batteringram**, **Pitchfork**, **Pitchfork**
+- **New**: _Nonce_Generator_: Generate the WordPress Nonce
+
 #### [TP-Generator v2024.6.13](https://github.com/truocphan/TP-Generator/tree/2024.6.13)
 - **Updated**: _MFA_Generator_: Fixed error generating **TOTP**, **HOTP** from jython
 
