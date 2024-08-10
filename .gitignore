@@ -11,3 +11,4 @@
 !/TP_Generator/AttackTypes.py
 !/TP_Generator/MFA_Generator.py
 !/TP_Generator/Bruteforcer_List.py
+!/TP_Generator/Nonce_Generator.py

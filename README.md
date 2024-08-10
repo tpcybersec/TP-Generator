@@ -30,8 +30,119 @@ python setup.py install
 
 ## Basic Usage
 ```
-from TP_Generator import AttackTypes, MFA_Generator, Bruteforcer_List
+from TP_Generator import AttackTypes
 
+InjectionPoints = [
+	"RequestBody||id",
+	"RequestBody||name"
+]
+
+Payloads = [
+	[
+		"' AND '1'='1",
+		"' AND '1'='0"
+	]
+]
+
+for testcases in AttackTypes.Sniper(InjectionPoints, Payloads):
+	print(testcases)
+
+# {'RequestBody||id': "' AND '1'='1"}
+# {'RequestBody||id': "' AND '1'='0"}
+# {'RequestBody||name': "' AND '1'='1"}
+# {'RequestBody||name': "' AND '1'='0"}
+```
+
+```
+from TP_Generator import AttackTypes
+
+InjectionPoints = [
+	"RequestBody||id",
+	"RequestBody||name"
+]
+
+Payloads = [
+	[
+		"' AND '1'='1",
+		"' AND '1'='0"
+	]
+]
+
+for testcases in AttackTypes.Batteringram(InjectionPoints, Payloads):
+	print(testcases)
+
+# {'RequestBody||id': "' AND '1'='1", 'RequestBody||name': "' AND '1'='1"}
+# {'RequestBody||id': "' AND '1'='0", 'RequestBody||name': "' AND '1'='0"}
+```
+
+```
+from TP_Generator import AttackTypes
+
+InjectionPoints = [
+	"RequestBody||id",
+	"RequestBody||name"
+]
+
+Payloads = [
+	[
+		"' AND '1'='1",
+		"' AND '1'='0"
+	],
+	[
+		"' OR '1'='1",
+		"' OR '1'='0"
+	]
+]
+
+for testcases in AttackTypes.Pitchfork(InjectionPoints, Payloads):
+	print(testcases)
+
+# {'RequestBody||id': "' AND '1'='1", 'RequestBody||name': "' OR '1'='1"}
+# {'RequestBody||id': "' AND '1'='0", 'RequestBody||name': "' OR '1'='0"}
+```
+
+```
+from TP_Generator import AttackTypes
+
+InjectionPoints = [
+	"RequestBody||id",
+	"RequestBody||name"
+]
+
+Payloads = [
+	[
+		"' AND '1'='1",
+		"' AND '1'='0",
+		"' && '1'='1"
+	],
+	[
+		"' OR '1'='1",
+		"' OR '1'='0",
+	]
+]
+
+for testcases in AttackTypes.Clusterbomb(InjectionPoints, Payloads):
+	print(testcases)
+
+# {'RequestBody||id': "' AND '1'='1", 'RequestBody||name': "' OR '1'='1"}
+# {'RequestBody||id': "' AND '1'='1", 'RequestBody||name': "' OR '1'='0"}
+# {'RequestBody||id': "' AND '1'='0", 'RequestBody||name': "' OR '1'='1"}
+# {'RequestBody||id': "' AND '1'='0", 'RequestBody||name': "' OR '1'='0"}
+# {'RequestBody||id': "' && '1'='1", 'RequestBody||name': "' OR '1'='1"}
+# {'RequestBody||id': "' && '1'='1", 'RequestBody||name': "' OR '1'='0"}
+```
+
+```
+from TP_Generator import MFA_Generator
+
+print(MFA_Generator.TOTP("JBSWY3DPEHPK3PXP"))
+print(MFA_Generator.HOTP("JBSWY3DPEHPK3PXP", 1))
+```
+
+```
+from TP_Generator import Nonce_Generator
+
+print(Nonce_Generator.WordPress_Nonce("rest"))
 ```
 
 ## CHANGELOG
