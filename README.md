@@ -1,18 +1,15 @@
 # TP-Generator
 
 <p align="center">
-    <a href="https://github.com/truocphan/TP-Generator/releases/"><img src="https://img.shields.io/github/release/truocphan/TP-Generator" height=30></a>
+	<a href="https://github.com/truocphan/TP-Generator/releases/"><img src="https://img.shields.io/github/release/truocphan/TP-Generator" height=30></a>
 	<a href="#"><img src="https://img.shields.io/github/downloads/truocphan/TP-Generator/total" height=30></a>
 	<a href="#"><img src="https://img.shields.io/github/stars/truocphan/TP-Generator" height=30></a>
 	<a href="#"><img src="https://img.shields.io/github/forks/truocphan/TP-Generator" height=30></a>
 	<a href="https://github.com/truocphan/TP-Generator/issues?q=is%3Aopen+is%3Aissue"><img src="https://img.shields.io/github/issues/truocphan/TP-Generator" height=30></a>
 	<a href="https://github.com/truocphan/TP-Generator/issues?q=is%3Aissue+is%3Aclosed"><img src="https://img.shields.io/github/issues-closed/truocphan/TP-Generator" height=30></a>
-	<a href="https://pypi.org/project/TP-Generator/" target="_blank"><img src="https://img.shields.io/badge/pypi-3775A9?style=for-the-badge&logo=pypi&logoColor=white" height=30></a>
-	<a href="https://www.facebook.com/61550595106970" target="_blank"><img src="https://img.shields.io/badge/Facebook-1877F2?style=for-the-badge&logo=facebook&logoColor=white" height=30></a>
-	<a href="https://twitter.com/TPCyberSec" target="_blank"><img src="https://img.shields.io/badge/Twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white" height=30></a>
-	<a href="https://github.com/truocphan" target="_blank"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" height=30></a>
-	<a href="mailto:tpcybersec2023@gmail.com" target="_blank"><img src="https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white" height=30></a>
-	<a href="https://www.buymeacoffee.com/truocphan" target="_blank"><img src="https://img.shields.io/badge/Buy_Me_A_Coffee-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black" height=30></a>
+	<br>
+	<a href="#"><img src="https://img.shields.io/pypi/v/TP-Generator" height=30></a>
+	<a href="#"><img src="https://img.shields.io/pypi/dm/TP-Generator" height=30></a>
 </p>
 
 ## Installation
@@ -29,6 +26,48 @@ python setup.py install
 ```
 
 ## Basic Usage
+### Utils
+```
+from TP_Generator import Utils
+
+Utils.timestamp(10)
+# OUTPUT: 1733597189
+
+Utils.uuid(1)
+# OUTPUT: '9daeab4b-b4cb-11ef-b79b-00a554ba203d'
+
+Utils.RandomNumber(0, 1000)
+# OUTPUT: 931
+
+Utils.RandomString(10)
+# OUTPUT: 'Wz<:1<.YSC'
+
+Utils.Str2Hex('TPCyberSec')
+# OUTPUT: '54504379626572536563'
+
+Utils.Hex2Str('54504379626572536563')
+# OUTPUT: 'TPCyberSec'
+
+Utils.base64Encode('TPCyberSec')
+# OUTPUT: 'VFBDeWJlclNlYw=='
+
+Utils.base64Decode('VFBDeWJlclNlYw==')
+# OUTPUT: 'TPCyberSec'
+
+Utils.base64UrlEncode('TPCyberSec')
+# OUTPUT: 'VFBDeWJlclNlYw'
+
+Utils.base64UrlDecode('VFBDeWJlclNlYw')
+# OUTPUT: 'TPCyberSec'
+
+Utils.UrlEncode('TP Cyber Security')
+# OUTPUT: 'TP%20Cyber%20Security'
+
+Utils.UrlDecode('TP%20Cyber%20Security')
+# OUTPUT: 'TP Cyber Security'
+
+```
+
 #### Generating testcases for the Sniper attack
 ```
 from TP_Generator import AttackTypes
@@ -163,7 +202,27 @@ print(Nonce_Generator.WordPress_Nonce(nonce_action=action, WORDPRESS_NONCE_KEY=N
 # OUTPUT: ac06630f78
 ```
 
+#### (Un)parsing QR Code
+```
+from TP_Generator import QR_Generator
+
+QR_String = "00020101021230340009nbcb@devb01090000001230204DEVB520459995303840540115802KH5912Coffee Klang6010Phnom Penh62300314Coffe Klang0010708A60086679917001316418876882756304CE7C"
+
+QRObj = QR_Generator.intQR("KHQR_Corporate").parse(QR_String)
+print(QRObj.dumps())
+# OUTPUT: {"PayloadFormatIndicator": "01", "PointOfInitiationMethod": "12", "MerchantAccountInformation": {"BakongAccountID": "nbcb@devb", "MerchantID": "000000123", "AcquiringBank": "DEVB"}, "MerchantCategoryCode": "5999", "TransactionCurrency": "840", "TransactionAmount": "1", "CountryCode": "KH", "MerchantName": "Coffee Klang", "MerchantCity": "Phnom Penh", "AdditionalDataFieldTemplate": {"StoreLabel": "Coffe Klang001", "TerminalLabel": "A6008667"}, "CRC": "CE7C", "Timestamp": {"timestamp": "1641887688275"}}
+
+QRObj.update("TransactionAmount", "1000")
+print(QR_Generator.intQR("KHQR_Corporate").unparse(QRObj))
+# OUTPUT: 00020101021230340009nbcb@devb01090000001230204DEVB520459995303840540410005802KH5912Coffee Klang6010Phnom Penh62300314Coffe Klang0010708A600866799170013164188768827563043ECD
+```
+
+
 ## CHANGELOG
+#### [TP-Generator v2024.12.12](https://github.com/truocphan/TP-Generator/tree/2024.12.12)
+- **New**: _Utils_ module
+- **New**: _QR_Generator_: Parse/Unparse QR code types: **VietQR**, **MoMo**, **KHQR_Individual**, **KHQR_Corporate**
+
 #### [TP-Generator v2024.8.10](https://github.com/truocphan/TP-Generator/tree/2024.8.10)
 - **Updated**: _AttackTypes_: **Sniper**, **Batteringram**, **Pitchfork**, **Pitchfork**
 - **New**: _Nonce_Generator_: Generate the WordPress Nonce

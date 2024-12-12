@@ -8,7 +8,9 @@
 !/setup.py
 !/TP_Generator/
 !/TP_Generator/__init__.py
+!/TP_Generator/Utils.py
 !/TP_Generator/AttackTypes.py
 !/TP_Generator/MFA_Generator.py
 !/TP_Generator/Bruteforcer_List.py
 !/TP_Generator/Nonce_Generator.py
+!/TP_Generator/QR_Generator.py

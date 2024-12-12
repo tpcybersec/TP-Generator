@@ -1,7 +1,12 @@
-def UUID1(ori_uuid1, ori_nanoseconds_received, nanoseconds_received):
+try:
+	long # Python 2
+except NameError:
+	long = int # Python 3
+
+def UUID1(ori_uuid1, ori_nanoseconds_received, nanoseconds_received, ClockSequence=None):
 	import uuid, time
 
-	if uuid.UUID(ori_uuid1).version == 1 and type(ori_nanoseconds_received) == int and type(nanoseconds_received) == int:
+	if uuid.UUID(ori_uuid1).version == 1 and type(ori_nanoseconds_received) in [int, long] and type(nanoseconds_received) in [int, long]:
 		# 0x01b21dd213814000 is the number of 100-ns intervals between the UUID epoch 1582-10-15 00:00:00 and the Unix epoch 1970-01-01 00:00:00.
 		# nanoseconds = int(time.time() * 1e9)
 		# uuid1_time = int(nanoseconds/100) + 0x01b21dd213814000
@@ -16,17 +21,20 @@ def UUID1(ori_uuid1, ori_nanoseconds_received, nanoseconds_received):
 			uuid1_PartOneTwoThree.append(uuid1_TimeLow + "-" + uuid1_TimeMid + "-" + uuid1_VersionAndTimeHigh)
 
 
-		variant = ori_uuid1.split("-")[3][0]
-		if 0x0 <= int(variant, 16) <= 0x7:
-			uuid1_ClockSequence = [hex(i)[2:].zfill(4) for i in range(0x0000, 0x8000)]
-		elif 0x8 <= int(variant, 16) <= 0xb:
-			uuid1_ClockSequence = [hex(i)[2:].zfill(4) for i in range(0x8000, 0xc000)]
-		elif 0xc <= int(variant, 16) <= 0xd:
-			uuid1_ClockSequence = [hex(i)[2:].zfill(4) for i in range(0xc000, 0xe000)]
-		elif int(variant, 16) == 0xe:
-			uuid1_ClockSequence = [hex(i)[2:].zfill(4) for i in range(0xe000, 0xf000)]
+		if type(ClockSequence) in [list, range]:
+			uuid1_ClockSequence = [hex(i)[2:].zfill(4) for i in ClockSequence]
 		else:
-			uuid1_ClockSequence = [hex(i)[2:].zfill(4) for i in range(0xf000, 0xffff)]
+			variant = ori_uuid1.split("-")[3][0]
+			if 0x0 <= int(variant, 16) <= 0x7:
+				uuid1_ClockSequence = [hex(i)[2:].zfill(4) for i in range(0x0000, 0x8000)]
+			elif 0x8 <= int(variant, 16) <= 0xb:
+				uuid1_ClockSequence = [hex(i)[2:].zfill(4) for i in range(0x8000, 0xc000)]
+			elif 0xc <= int(variant, 16) <= 0xd:
+				uuid1_ClockSequence = [hex(i)[2:].zfill(4) for i in range(0xc000, 0xe000)]
+			elif int(variant, 16) == 0xe:
+				uuid1_ClockSequence = [hex(i)[2:].zfill(4) for i in range(0xe000, 0xf000)]
+			else:
+				uuid1_ClockSequence = [hex(i)[2:].zfill(4) for i in range(0xf000, 0xffff)]
 
 
 		uuid1_NodeID = ori_uuid1.split("-")[4]
