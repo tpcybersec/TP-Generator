@@ -2,7 +2,7 @@ import setuptools
 
 setuptools.setup(
 	name="TP-Generator",
-	version="2024.12.12",
+	version="2025.1.1",
 	author="TP Cyber Security",
 	license="MIT",
 	author_email="tpcybersec2023@gmail.com",

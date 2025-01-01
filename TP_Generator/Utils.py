@@ -10,6 +10,7 @@ import base64
 import random
 import string
 import urllib
+import binascii
 
 if platform.python_version_tuple()[0] == "3":
 	from urllib.parse import quote as urlencode, unquote as urldecode
@@ -47,6 +48,26 @@ def RandomString(length, charsets=None):
 	return "".join(random.choice(charsets) for i in range(length))
 
 
+def toUTF16(message, type="LE"):
+	retval = b""
+	for c in message:
+		if type == "LE":
+			retval += binascii.unhexlify(hex(ord(c))[2:].rjust(2, "0").ljust(4, "0"))
+		elif type == "BE":
+			retval += binascii.unhexlify(hex(ord(c))[2:].rjust(4, "0"))
+	return base64Encode(retval)
+
+
+def toUTF32(message, type="LE"):
+	retval = b""
+	for c in message:
+		if type == "LE":
+			retval += binascii.unhexlify(hex(ord(c))[2:].rjust(2, "0").ljust(8, "0"))
+		elif type == "BE":
+			retval += binascii.unhexlify(hex(ord(c))[2:].rjust(8, "0"))
+	return base64Encode(retval)
+
+
 def Str2Hex(message):
 	return "".join(["%02x"%ord(c) for c in message])
 
@@ -56,14 +77,18 @@ def Hex2Str(message):
 
 
 def base64Encode(message):
-	retval = base64.b64encode(message.encode())
+	if type(message) == str: message = message.encode()
+
+	retval = base64.b64encode(message)
 	if type(retval) == str:
 		return retval
 	return retval.decode()
 
 
 def base64Decode(message):
-	retval = base64.b64decode(message.encode())
+	if type(message) == str: message = message.encode()
+
+	retval = base64.b64decode(message)
 	if type(retval) == str:
 		return retval
 	return retval.decode()

@@ -42,6 +42,12 @@ Utils.RandomNumber(0, 1000)
 Utils.RandomString(10)
 # OUTPUT: 'Wz<:1<.YSC'
 
+Utils.toUTF16('TPCyberSec')
+# OUTPUT: 'VABQAEMAeQBiAGUAcgBTAGUAYwA='
+
+Utils.toUTF32('TPCyberSec')
+# OUTPUT: 'VAAAAFAAAABDAAAAeQAAAGIAAABlAAAAcgAAAFMAAABlAAAAYwAAAA=='
+
 Utils.Str2Hex('TPCyberSec')
 # OUTPUT: '54504379626572536563'
 
@@ -208,17 +214,21 @@ from TP_Generator import QR_Generator
 
 QR_String = "00020101021230340009nbcb@devb01090000001230204DEVB520459995303840540115802KH5912Coffee Klang6010Phnom Penh62300314Coffe Klang0010708A60086679917001316418876882756304CE7C"
 
-QRObj = QR_Generator.intQR("KHQR_Corporate").parse(QR_String)
+QRObj = QR_Generator.initQR("KHQR_Corporate").parse(QR_String)
 print(QRObj.dumps())
 # OUTPUT: {"PayloadFormatIndicator": "01", "PointOfInitiationMethod": "12", "MerchantAccountInformation": {"BakongAccountID": "nbcb@devb", "MerchantID": "000000123", "AcquiringBank": "DEVB"}, "MerchantCategoryCode": "5999", "TransactionCurrency": "840", "TransactionAmount": "1", "CountryCode": "KH", "MerchantName": "Coffee Klang", "MerchantCity": "Phnom Penh", "AdditionalDataFieldTemplate": {"StoreLabel": "Coffe Klang001", "TerminalLabel": "A6008667"}, "CRC": "CE7C", "Timestamp": {"timestamp": "1641887688275"}}
 
 QRObj.update("TransactionAmount", "1000")
-print(QR_Generator.intQR("KHQR_Corporate").unparse(QRObj))
+print(QR_Generator.initQR("KHQR_Corporate").unparse(QRObj))
 # OUTPUT: 00020101021230340009nbcb@devb01090000001230204DEVB520459995303840540410005802KH5912Coffee Klang6010Phnom Penh62300314Coffe Klang0010708A600866799170013164188768827563043ECD
 ```
 
 
 ## CHANGELOG
+#### [TP-Generator v2025.1.1](https://github.com/truocphan/TP-Generator/tree/2025.1.1)
+- **New**: _Utils_: **toUTF16**, **toUTF32**
+- **New**: _QR_Generator_: **VNPAYQR**
+
 #### [TP-Generator v2024.12.12](https://github.com/truocphan/TP-Generator/tree/2024.12.12)
 - **New**: _Utils_ module
 - **New**: _QR_Generator_: Parse/Unparse QR code types: **VietQR**, **MoMo**, **KHQR_Individual**, **KHQR_Corporate**
