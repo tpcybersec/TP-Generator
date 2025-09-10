@@ -9,7 +9,6 @@ import uuid as _uuid
 import base64
 import random
 import string
-import urllib
 import binascii
 
 if platform.python_version_tuple()[0] == "3":
@@ -77,36 +76,40 @@ def Hex2Str(message):
 
 
 def base64Encode(message):
-	if type(message) == str: message = message.encode()
+	if type(message) in [str, unicode]: message = message.encode("utf8")
 
 	retval = base64.b64encode(message)
-	if type(retval) == str:
+	if type(retval) in [str, unicode]:
 		return retval
-	return retval.decode()
+	return retval.decode("utf8")
 
 
 def base64Decode(message):
-	if type(message) == str: message = message.encode()
+	if type(message) in [str, unicode]: message = message.encode("utf8")
 
 	retval = base64.b64decode(message)
-	if type(retval) == str:
+	if type(retval) in [str, unicode]:
 		return retval
-	return retval.decode()
+	return retval.decode("utf8")
 
 
 def base64UrlEncode(message):
-	retval = base64.urlsafe_b64encode(message.encode()).rstrip(b"=")
-	if type(retval) == str:
+	if type(message) in [str, unicode]: message = message.encode("utf8")
+
+	retval = base64.urlsafe_b64encode(message).rstrip(b"=")
+	if type(retval) in [str, unicode]:
 		return retval
-	return retval.decode()
+	return retval.decode("utf8")
 
 
 def base64UrlDecode(message):
+	if type(message) in [str, unicode]: message = message.encode("utf8")
+
 	padding = b"=" * (4-(len(message)%4))
-	retval = base64.urlsafe_b64decode(message.encode()+padding)
-	if type(retval) == str:
+	retval = base64.urlsafe_b64decode(message+padding)
+	if type(retval) in [str, unicode]:
 		return retval
-	return retval.decode()
+	return retval.decode("utf8")
 
 
 def UrlEncode(message):

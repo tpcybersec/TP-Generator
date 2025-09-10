@@ -1,31 +1,34 @@
-# TP-Generator
-
-<p align="center">
-	<a href="https://github.com/truocphan/TP-Generator/releases/"><img src="https://img.shields.io/github/release/truocphan/TP-Generator" height=30></a>
-	<a href="#"><img src="https://img.shields.io/github/downloads/truocphan/TP-Generator/total" height=30></a>
-	<a href="#"><img src="https://img.shields.io/github/stars/truocphan/TP-Generator" height=30></a>
-	<a href="#"><img src="https://img.shields.io/github/forks/truocphan/TP-Generator" height=30></a>
-	<a href="https://github.com/truocphan/TP-Generator/issues?q=is%3Aopen+is%3Aissue"><img src="https://img.shields.io/github/issues/truocphan/TP-Generator" height=30></a>
-	<a href="https://github.com/truocphan/TP-Generator/issues?q=is%3Aissue+is%3Aclosed"><img src="https://img.shields.io/github/issues-closed/truocphan/TP-Generator" height=30></a>
+<div align="center">
+	<h1>TP-Generator - PyPI</h1>
+	<i></i>
+	<br><br>
+	<a href="https://github.com/TPCyberSec/TP-Generator/releases/"><img src="https://img.shields.io/github/release/TPCyberSec/TP-Generator" height=30></a>
+	<a href="#"><img src="https://img.shields.io/github/downloads/TPCyberSec/TP-Generator/total" height=30></a>
+	<a href="#"><img src="https://img.shields.io/github/stars/TPCyberSec/TP-Generator" height=30></a>
+	<a href="#"><img src="https://img.shields.io/github/forks/TPCyberSec/TP-Generator" height=30></a>
+	<a href="https://github.com/TPCyberSec/TP-Generator/issues?q=is%3Aopen+is%3Aissue"><img src="https://img.shields.io/github/issues/TPCyberSec/TP-Generator" height=30></a>
+	<a href="https://github.com/TPCyberSec/TP-Generator/issues?q=is%3Aissue+is%3Aclosed"><img src="https://img.shields.io/github/issues-closed/TPCyberSec/TP-Generator" height=30></a>
 	<br>
 	<a href="#"><img src="https://img.shields.io/pypi/v/TP-Generator" height=30></a>
+	<a href="#"><img src="https://img.shields.io/pypi/pyversions/TP-Generator" height=30></a>
 	<a href="#"><img src="https://img.shields.io/pypi/dm/TP-Generator" height=30></a>
-</p>
+</div>
 
-## Installation
+---
+# 🛠️ Installation
 #### From PyPI:
 ```console
-pip install TP-Generator
+pip install tp-generator
 ```
 #### From Source:
 ```console
-git clone https://github.com/truocphan/TP-Generator.git --branch <Branch/Tag>
-cd TP-Generator
-python setup.py build
-python setup.py install
+git clone https://github.com/TPCyberSec/TP-Generator.git --branch <Branch/Tag>
+cd TP-TP-Generator
+python -m build
+python -m pip install dist/tp_generator-<version>-py3-none-any.whl
 ```
 
-## Basic Usage
+# 📘 Basic Usage
 ### Utils
 ```
 from TP_Generator import Utils
@@ -74,7 +77,7 @@ Utils.UrlDecode('TP%20Cyber%20Security')
 
 ```
 
-#### Generating testcases for the Sniper attack
+### Generating testcases for the Sniper attack
 ```
 from TP_Generator import AttackTypes
 
@@ -100,7 +103,7 @@ for testcases in AttackTypes.Sniper(InjectionPoints, Payloads):
 # {'RequestBody||name': "' AND '1'='0"}
 ```
 
-#### Generating testcases for the Batteringram attack
+### Generating testcases for the Batteringram attack
 ```
 from TP_Generator import AttackTypes
 
@@ -124,7 +127,7 @@ for testcases in AttackTypes.Batteringram(InjectionPoints, Payloads):
 # {'RequestBody||id': "' AND '1'='0", 'RequestBody||name': "' AND '1'='0"}
 ```
 
-#### Generating testcases for the Pitchfork attack
+### Generating testcases for the Pitchfork attack
 ```
 from TP_Generator import AttackTypes
 
@@ -152,7 +155,7 @@ for testcases in AttackTypes.Pitchfork(InjectionPoints, Payloads):
 # {'RequestBody||id': "' AND '1'='0", 'RequestBody||name': "' OR '1'='0"}
 ```
 
-#### Generating testcases for the Clusterbomb attack
+### Generating testcases for the Clusterbomb attack
 ```
 from TP_Generator import AttackTypes
 
@@ -185,7 +188,7 @@ for testcases in AttackTypes.Clusterbomb(InjectionPoints, Payloads):
 # {'RequestBody||id': "' && '1'='1", 'RequestBody||name': "' OR '1'='0"}
 ```
 
-#### Generating the TOTP, HOTP code
+### Generating the TOTP, HOTP code
 ```
 from TP_Generator import MFA_Generator
 
@@ -196,7 +199,7 @@ print(MFA_Generator.HOTP("JBSWY3DPEHPK3PXP", 1))
 # OUTPUT: 996554
 ```
 
-#### Generating the WordPress Nonce for unauthenticated users with wp-rest action
+### Generating the WordPress Nonce for unauthenticated users with wp-rest action
 ```
 from TP_Generator import Nonce_Generator
 
@@ -208,7 +211,7 @@ print(Nonce_Generator.WordPress_Nonce(nonce_action=action, WORDPRESS_NONCE_KEY=N
 # OUTPUT: ac06630f78
 ```
 
-#### (Un)parsing QR Code
+### (Un)parsing QR Code
 ```
 from TP_Generator import QR_Generator
 
@@ -223,28 +226,36 @@ print(QR_Generator.initQR("KHQR_Corporate").unparse(QRObj))
 # OUTPUT: 00020101021230340009nbcb@devb01090000001230204DEVB520459995303840540410005802KH5912Coffee Klang6010Phnom Penh62300314Coffe Klang0010708A600866799170013164188768827563043ECD
 ```
 
+---
+# 👥 Contributors
 
-## CHANGELOG
-#### [TP-Generator v2025.1.1](https://github.com/truocphan/TP-Generator/tree/2025.1.1)
+---
+# 📝 CHANGELOG
+### [TP-Generator v2025.9.10](https://github.com/TPCyberSec/TP-Generator/tree/2025.9.10)
+- **Fixed**:  _base64Encode_, _base64Decode_, _base64UrlEncode_, _base64UrlDecode_
+
+### [TP-Generator v2025.1.1](https://github.com/TPCyberSec/TP-Generator/tree/2025.1.1)
 - **New**: _Utils_: **toUTF16**, **toUTF32**
 - **New**: _QR_Generator_: **VNPAYQR**
 
-#### [TP-Generator v2024.12.12](https://github.com/truocphan/TP-Generator/tree/2024.12.12)
+### [TP-Generator v2024.12.12](https://github.com/TPCyberSec/TP-Generator/tree/2024.12.12)
 - **New**: _Utils_ module
 - **New**: _QR_Generator_: Parse/Unparse QR code types: **VietQR**, **MoMo**, **KHQR_Individual**, **KHQR_Corporate**
 
-#### [TP-Generator v2024.8.10](https://github.com/truocphan/TP-Generator/tree/2024.8.10)
+### [TP-Generator v2024.8.10](https://github.com/TPCyberSec/TP-Generator/tree/2024.8.10)
 - **Updated**: _AttackTypes_: **Sniper**, **Batteringram**, **Pitchfork**, **Pitchfork**
 - **New**: _Nonce_Generator_: Generate the WordPress Nonce
 
-#### [TP-Generator v2024.6.13](https://github.com/truocphan/TP-Generator/tree/2024.6.13)
+### [TP-Generator v2024.6.13](https://github.com/TPCyberSec/TP-Generator/tree/2024.6.13)
 - **Updated**: _MFA_Generator_: Fixed error generating **TOTP**, **HOTP** from jython
 
-#### [TP-Generator v2024.4.5](https://github.com/truocphan/TP-Generator/tree/2024.4.5)
+### [TP-Generator v2024.4.5](https://github.com/TPCyberSec/TP-Generator/tree/2024.4.5)
 - **New**: _Bruteforcer_List_: **UUID1**
 
-#### [TP-Generator v2024.3.3](https://github.com/truocphan/TP-Generator/tree/2024.3.3)
+### [TP-Generator v2024.3.3](https://github.com/TPCyberSec/TP-Generator/tree/2024.3.3)
 - **New**: _MFA_Generator_: **TOTP** (Time-based One-Time Password) and **HOTP** (HMAC-based One-Time Password)
 
-#### [TP-Generator v2024.3.1](https://github.com/truocphan/TP-Generator/tree/2024.3.1)
+### [TP-Generator v2024.3.1](https://github.com/TPCyberSec/TP-Generator/tree/2024.3.1)
 - **New**: Generate test cases for attack types: **_Sniper_**, **_Battering Ram_**, **_Pitchfork_**, **_Cluster Bomb_**
+
+---
