@@ -28,10 +28,11 @@ python -m build
 python -m pip install dist/tp_generator-<version>-py3-none-any.whl
 ```
 
+---
 # 📘 Basic Usage
 ### Utils
 ```
-from TP_Generator import Utils
+from tp_generator import Utils
 
 Utils.timestamp(10)
 # OUTPUT: 1733597189
@@ -79,7 +80,7 @@ Utils.UrlDecode('TP%20Cyber%20Security')
 
 ### Generating testcases for the Sniper attack
 ```
-from TP_Generator import AttackTypes
+from tp_generator import AttackTypes
 
 InjectionPoints = [
 	"RequestBody||id",
@@ -105,7 +106,7 @@ for testcases in AttackTypes.Sniper(InjectionPoints, Payloads):
 
 ### Generating testcases for the Batteringram attack
 ```
-from TP_Generator import AttackTypes
+from tp_generator import AttackTypes
 
 InjectionPoints = [
 	"RequestBody||id",
@@ -129,7 +130,7 @@ for testcases in AttackTypes.Batteringram(InjectionPoints, Payloads):
 
 ### Generating testcases for the Pitchfork attack
 ```
-from TP_Generator import AttackTypes
+from tp_generator import AttackTypes
 
 InjectionPoints = [
 	"RequestBody||id",
@@ -157,7 +158,7 @@ for testcases in AttackTypes.Pitchfork(InjectionPoints, Payloads):
 
 ### Generating testcases for the Clusterbomb attack
 ```
-from TP_Generator import AttackTypes
+from tp_generator import AttackTypes
 
 InjectionPoints = [
 	"RequestBody||id",
@@ -190,7 +191,7 @@ for testcases in AttackTypes.Clusterbomb(InjectionPoints, Payloads):
 
 ### Generating the TOTP, HOTP code
 ```
-from TP_Generator import MFA_Generator
+from tp_generator import MFA_Generator
 
 print(MFA_Generator.TOTP("JBSWY3DPEHPK3PXP"))
 # OUTPUT: 862642
@@ -201,7 +202,7 @@ print(MFA_Generator.HOTP("JBSWY3DPEHPK3PXP", 1))
 
 ### Generating the WordPress Nonce for unauthenticated users with wp-rest action
 ```
-from TP_Generator import Nonce_Generator
+from tp_generator import Nonce_Generator
 
 action = "wp-rest"
 NONCE_KEY = "Y9(H0]_u8BA:^or^<^4>AM@EkgnAm`{Mpsq*H!Z-?8 OHe6ITmPY6kQSai)y3w{}"
@@ -211,9 +212,9 @@ print(Nonce_Generator.WordPress_Nonce(nonce_action=action, WORDPRESS_NONCE_KEY=N
 # OUTPUT: ac06630f78
 ```
 
-### (Un)parsing QR Code
+### (Un)parsing QR Code: VietQR (`TAG 38`), MoMo (`TAG 38`), VNPAYQR (`TAG 26`), KHQR_Individual (`TAG 29`), KHQR_Corporate (`TAG 30`), ThaiQR_CREDIT_TRANSFER (`TAG 29`), ThaiQR_BILL_PAYMENT (`TAG 30`)
 ```
-from TP_Generator import QR_Generator
+from tp_generator import QR_Generator
 
 QR_String = "00020101021230340009nbcb@devb01090000001230204DEVB520459995303840540115802KH5912Coffee Klang6010Phnom Penh62300314Coffe Klang0010708A60086679917001316418876882756304CE7C"
 
@@ -231,16 +232,19 @@ print(QR_Generator.initQR("KHQR_Corporate").unparse(QRObj))
 
 ---
 # 📝 CHANGELOG
+### [TP-Generator v2025.10.7](https://github.com/TPCyberSec/TP-Generator/tree/2025.10.7)
+- **New**: _QR_Generator_: **ThaiQR_CREDIT_TRANSFER** (`TAG 29`), **ThaiQR_BILL_PAYMENT** (`TAG 30`)
+
 ### [TP-Generator v2025.9.10](https://github.com/TPCyberSec/TP-Generator/tree/2025.9.10)
 - **Fixed**:  _base64Encode_, _base64Decode_, _base64UrlEncode_, _base64UrlDecode_
 
 ### [TP-Generator v2025.1.1](https://github.com/TPCyberSec/TP-Generator/tree/2025.1.1)
 - **New**: _Utils_: **toUTF16**, **toUTF32**
-- **New**: _QR_Generator_: **VNPAYQR**
+- **New**: _QR_Generator_: **VNPAYQR** (`TAG 26`)
 
 ### [TP-Generator v2024.12.12](https://github.com/TPCyberSec/TP-Generator/tree/2024.12.12)
 - **New**: _Utils_ module
-- **New**: _QR_Generator_: Parse/Unparse QR code types: **VietQR**, **MoMo**, **KHQR_Individual**, **KHQR_Corporate**
+- **New**: _QR_Generator_: Parse/Unparse QR code types: **VietQR** (`TAG 38`), **MoMo** (`TAG 38`), **KHQR_Individual** (`TAG 29`), **KHQR_Corporate** (`TAG 30`)
 
 ### [TP-Generator v2024.8.10](https://github.com/TPCyberSec/TP-Generator/tree/2024.8.10)
 - **Updated**: _AttackTypes_: **Sniper**, **Batteringram**, **Pitchfork**, **Pitchfork**

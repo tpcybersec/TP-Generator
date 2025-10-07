@@ -33,6 +33,22 @@ class initQR:
 			self.QR.set("30||subTag||00", jdks.loads('{ "name":"BakongAccountID", "value":"" }', ordered_dict=True).getObject())
 			self.QR.set("30||subTag||01", jdks.loads('{ "name":"MerchantID", "value":"" }', ordered_dict=True).getObject())
 			self.QR.set("30||subTag||02", jdks.loads('{ "name":"AcquiringBank", "value":"" }', ordered_dict=True).getObject())
+		
+		elif self.QR_Type == "ThaiQR_CREDIT_TRANSFER":
+			self.QR.set("29", jdks.loads('{ "name":"MerchantAccountInformation", "value":"", "subTag":{} }', ordered_dict=True).getObject())
+			self.QR.set("29||subTag||00", jdks.loads('{ "name":"AID", "value":"" }', ordered_dict=True).getObject())
+			self.QR.set("29||subTag||01", jdks.loads('{ "name":"PhoneNumber", "value":"" }', ordered_dict=True).getObject())
+			self.QR.set("29||subTag||02", jdks.loads('{ "name":"NationalID_or_TaxID", "value":"" }', ordered_dict=True).getObject())
+			self.QR.set("29||subTag||03", jdks.loads('{ "name":"eWalletID", "value":"" }', ordered_dict=True).getObject())
+			self.QR.set("29||subTag||04", jdks.loads('{ "name":"BankAccount", "value":"" }', ordered_dict=True).getObject())
+			self.QR.set("29||subTag||05", jdks.loads('{ "name":"OTA", "value":"" }', ordered_dict=True).getObject())
+
+		elif self.QR_Type == "ThaiQR_BILL_PAYMENT":
+			self.QR.set("30", jdks.loads('{ "name":"MerchantAccountInformation", "value":"", "subTag":{} }', ordered_dict=True).getObject())
+			self.QR.set("30||subTag||00", jdks.loads('{ "name":"AID", "value":"" }', ordered_dict=True).getObject())
+			self.QR.set("30||subTag||01", jdks.loads('{ "name":"BillerID", "value":"" }', ordered_dict=True).getObject())
+			self.QR.set("30||subTag||02", jdks.loads('{ "name":"Reference_1", "value":"" }', ordered_dict=True).getObject())
+			self.QR.set("30||subTag||03", jdks.loads('{ "name":"Reference_2", "value":"" }', ordered_dict=True).getObject())
 
 
 		self.QR.set("52", jdks.loads('{ "name":"MerchantCategoryCode", "value":"" }', ordered_dict=True).getObject())
@@ -212,6 +228,52 @@ class initQR:
 
 				TAG_3002 = QRObj.get("MerchantAccountInformation||AcquiringBank")
 				if TAG_3002["value"] != "JSON_DUPLICATE_KEYS_ERROR" and len(str(TAG_3002["value"])) > 0: TAG_30_val += "{}{:02}{}".format("02", len(str(TAG_3002["value"])), str(TAG_3002["value"]))
+
+				for unknownKey in QRObj.filter_keys("^MerchantAccountInformation\\|\\|UnknownField").getObject():
+					TAG_30_val += str(QRObj.get(unknownKey)["value"])
+
+				QR_String += "{}{:02}{}".format("30", len(TAG_30_val), TAG_30_val)
+		elif self.QR_Type == "ThaiQR_CREDIT_TRANSFER":
+			TAG_29 = QRObj.get("MerchantAccountInformation")
+			if TAG_29["value"] != "JSON_DUPLICATE_KEYS_ERROR" and len(str(TAG_29["value"])) > 0:
+				TAG_29_val = ""
+				TAG_2900 = QRObj.get("MerchantAccountInformation||AID")
+				if TAG_2900["value"] != "JSON_DUPLICATE_KEYS_ERROR" and len(str(TAG_2900["value"])) > 0: TAG_29_val += "{}{:02}{}".format("00", len(str(TAG_2900["value"])), str(TAG_2900["value"]))
+
+				TAG_2901 = QRObj.get("MerchantAccountInformation||PhoneNumber")
+				if TAG_2901["value"] != "JSON_DUPLICATE_KEYS_ERROR" and len(str(TAG_2901["value"])) > 0: TAG_29_val += "{}{:02}{}".format("01", len(str(TAG_2901["value"])), str(TAG_2901["value"]))
+
+				TAG_2902 = QRObj.get("MerchantAccountInformation||NationalID_or_TaxID")
+				if TAG_2902["value"] != "JSON_DUPLICATE_KEYS_ERROR" and len(str(TAG_2902["value"])) > 0: TAG_29_val += "{}{:02}{}".format("02", len(str(TAG_2902["value"])), str(TAG_2902["value"]))
+
+				TAG_2903 = QRObj.get("MerchantAccountInformation||eWalletID")
+				if TAG_2903["value"] != "JSON_DUPLICATE_KEYS_ERROR" and len(str(TAG_2903["value"])) > 0: TAG_29_val += "{}{:02}{}".format("03", len(str(TAG_2903["value"])), str(TAG_2903["value"]))
+
+				TAG_2904 = QRObj.get("MerchantAccountInformation||BankAccount")
+				if TAG_2904["value"] != "JSON_DUPLICATE_KEYS_ERROR" and len(str(TAG_2904["value"])) > 0: TAG_29_val += "{}{:02}{}".format("04", len(str(TAG_2904["value"])), str(TAG_2904["value"]))
+
+				TAG_2905 = QRObj.get("MerchantAccountInformation||OTA")
+				if TAG_2905["value"] != "JSON_DUPLICATE_KEYS_ERROR" and len(str(TAG_2905["value"])) > 0: TAG_29_val += "{}{:02}{}".format("05", len(str(TAG_2905["value"])), str(TAG_2905["value"]))
+
+				for unknownKey in QRObj.filter_keys("^MerchantAccountInformation\\|\\|UnknownField").getObject():
+					TAG_29_val += str(QRObj.get(unknownKey)["value"])
+
+				QR_String += "{}{:02}{}".format("29", len(TAG_29_val), TAG_29_val)
+		elif self.QR_Type == "ThaiQR_BILL_PAYMENT":
+			TAG_30 = QRObj.get("MerchantAccountInformation")
+			if TAG_30["value"] != "JSON_DUPLICATE_KEYS_ERROR" and len(str(TAG_30["value"])) > 0:
+				TAG_30_val = ""
+				TAG_3000 = QRObj.get("MerchantAccountInformation||AID")
+				if TAG_3000["value"] != "JSON_DUPLICATE_KEYS_ERROR" and len(str(TAG_3000["value"])) > 0: TAG_30_val += "{}{:02}{}".format("00", len(str(TAG_3000["value"])), str(TAG_3000["value"]))
+
+				TAG_3001 = QRObj.get("MerchantAccountInformation||BillerID")
+				if TAG_3001["value"] != "JSON_DUPLICATE_KEYS_ERROR" and len(str(TAG_3001["value"])) > 0: TAG_30_val += "{}{:02}{}".format("01", len(str(TAG_3001["value"])), str(TAG_3001["value"]))
+
+				TAG_3002 = QRObj.get("MerchantAccountInformation||Reference_1")
+				if TAG_3002["value"] != "JSON_DUPLICATE_KEYS_ERROR" and len(str(TAG_3002["value"])) > 0: TAG_30_val += "{}{:02}{}".format("02", len(str(TAG_3002["value"])), str(TAG_3002["value"]))
+
+				TAG_3003 = QRObj.get("MerchantAccountInformation||Reference_2")
+				if TAG_3003["value"] != "JSON_DUPLICATE_KEYS_ERROR" and len(str(TAG_3003["value"])) > 0: TAG_30_val += "{}{:02}{}".format("03", len(str(TAG_3003["value"])), str(TAG_3003["value"]))
 
 				for unknownKey in QRObj.filter_keys("^MerchantAccountInformation\\|\\|UnknownField").getObject():
 					TAG_30_val += str(QRObj.get(unknownKey)["value"])

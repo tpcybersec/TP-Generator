@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "tp-generator"
-version = "2025.9.10"
+version = "2025.10.7"
 description = ""
 readme = { file = "README.md", content-type = "text/markdown" }
 license = { text = "MIT" }
@@ -19,7 +19,7 @@ authors = [
 ]
 
 dependencies = [
-  "json-duplicate-keys>=2025.9.9"
+  "json-duplicate-keys>=2025.9.30"
 ]
 
 [project.urls]
