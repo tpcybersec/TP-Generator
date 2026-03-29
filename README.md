@@ -18,7 +18,7 @@
 # 🛠️ Installation
 #### From PyPI:
 ```console
-pip install tp-generator
+pip install TP-Generator
 ```
 #### From Source:
 ```console
@@ -32,7 +32,7 @@ python -m pip install dist/tp_generator-<version>-py3-none-any.whl
 # 📘 Basic Usage
 ### Utils
 ```
-from tp_generator import Utils
+from TP_Generator import Utils
 
 Utils.timestamp(10)
 # OUTPUT: 1733597189
@@ -47,10 +47,10 @@ Utils.RandomString(10)
 # OUTPUT: 'Wz<:1<.YSC'
 
 Utils.toUTF16('TPCyberSec')
-# OUTPUT: 'VABQAEMAeQBiAGUAcgBTAGUAYwA='
+# OUTPUT: b'T\x00P\x00C\x00y\x00b\x00e\x00r\x00S\x00e\x00c\x00'
 
 Utils.toUTF32('TPCyberSec')
-# OUTPUT: 'VAAAAFAAAABDAAAAeQAAAGIAAABlAAAAcgAAAFMAAABlAAAAYwAAAA=='
+# OUTPUT: b'T\x00\x00\x00P\x00\x00\x00C\x00\x00\x00y\x00\x00\x00b\x00\x00\x00e\x00\x00\x00r\x00\x00\x00S\x00\x00\x00e\x00\x00\x00c\x00\x00\x00'
 
 Utils.Str2Hex('TPCyberSec')
 # OUTPUT: '54504379626572536563'
@@ -58,17 +58,17 @@ Utils.Str2Hex('TPCyberSec')
 Utils.Hex2Str('54504379626572536563')
 # OUTPUT: 'TPCyberSec'
 
-Utils.base64Encode('TPCyberSec')
-# OUTPUT: 'VFBDeWJlclNlYw=='
+Utils.base64Encode('TPCyberSec'.encode())
+# OUTPUT: b'VFBDeWJlclNlYw=='
 
 Utils.base64Decode('VFBDeWJlclNlYw==')
-# OUTPUT: 'TPCyberSec'
+# OUTPUT: b'TPCyberSec'
 
-Utils.base64UrlEncode('TPCyberSec')
-# OUTPUT: 'VFBDeWJlclNlYw'
+Utils.base64UrlEncode('TPCyberSec'.encode())
+# OUTPUT: b'VFBDeWJlclNlYw'
 
-Utils.base64UrlDecode('VFBDeWJlclNlYw')
-# OUTPUT: 'TPCyberSec'
+Utils.base64UrlDecode('VFBDeWJlclNlYw'.encode())
+# OUTPUT: b'TPCyberSec'
 
 Utils.UrlEncode('TP Cyber Security')
 # OUTPUT: 'TP%20Cyber%20Security'
@@ -80,7 +80,7 @@ Utils.UrlDecode('TP%20Cyber%20Security')
 
 ### Generating testcases for the Sniper attack
 ```
-from tp_generator import AttackTypes
+from TP_Generator import AttackTypes
 
 InjectionPoints = [
 	"RequestBody||id",
@@ -106,7 +106,7 @@ for testcases in AttackTypes.Sniper(InjectionPoints, Payloads):
 
 ### Generating testcases for the Batteringram attack
 ```
-from tp_generator import AttackTypes
+from TP_Generator import AttackTypes
 
 InjectionPoints = [
 	"RequestBody||id",
@@ -130,7 +130,7 @@ for testcases in AttackTypes.Batteringram(InjectionPoints, Payloads):
 
 ### Generating testcases for the Pitchfork attack
 ```
-from tp_generator import AttackTypes
+from TP_Generator import AttackTypes
 
 InjectionPoints = [
 	"RequestBody||id",
@@ -158,7 +158,7 @@ for testcases in AttackTypes.Pitchfork(InjectionPoints, Payloads):
 
 ### Generating testcases for the Clusterbomb attack
 ```
-from tp_generator import AttackTypes
+from TP_Generator import AttackTypes
 
 InjectionPoints = [
 	"RequestBody||id",
@@ -191,7 +191,7 @@ for testcases in AttackTypes.Clusterbomb(InjectionPoints, Payloads):
 
 ### Generating the TOTP, HOTP code
 ```
-from tp_generator import MFA_Generator
+from TP_Generator import MFA_Generator
 
 print(MFA_Generator.TOTP("JBSWY3DPEHPK3PXP"))
 # OUTPUT: 862642
@@ -202,7 +202,7 @@ print(MFA_Generator.HOTP("JBSWY3DPEHPK3PXP", 1))
 
 ### Generating the WordPress Nonce for unauthenticated users with wp-rest action
 ```
-from tp_generator import Nonce_Generator
+from TP_Generator import Nonce_Generator
 
 action = "wp-rest"
 NONCE_KEY = "Y9(H0]_u8BA:^or^<^4>AM@EkgnAm`{Mpsq*H!Z-?8 OHe6ITmPY6kQSai)y3w{}"
@@ -214,7 +214,7 @@ print(Nonce_Generator.WordPress_Nonce(nonce_action=action, WORDPRESS_NONCE_KEY=N
 
 ### (Un)parsing QR Code: VietQR (`TAG 38`), MoMo (`TAG 38`), VNPAYQR (`TAG 26`), KHQR_Individual (`TAG 29`), KHQR_Corporate (`TAG 30`), ThaiQR_CREDIT_TRANSFER (`TAG 29`), ThaiQR_BILL_PAYMENT (`TAG 30`)
 ```
-from tp_generator import QR_Generator
+from TP_Generator import QR_Generator
 
 QR_String = "00020101021230340009nbcb@devb01090000001230204DEVB520459995303840540115802KH5912Coffee Klang6010Phnom Penh62300314Coffe Klang0010708A60086679917001316418876882756304CE7C"
 
@@ -232,6 +232,9 @@ print(QR_Generator.initQR("KHQR_Corporate").unparse(QRObj))
 
 ---
 # 📝 CHANGELOG
+### [TP-Generator v2026.3.29](https://github.com/TPCyberSec/TP-Generator/tree/v2026.3.29)
+- **Updated**: **toUTF16**, **toUTF32**, **base64Encode**, **base64Decode**, **base64UrlEncode**, **base64UrlDecode** functions in _Utils_ module
+
 ### [TP-Generator v2025.10.7](https://github.com/TPCyberSec/TP-Generator/tree/2025.10.7)
 - **New**: _QR_Generator_: **ThaiQR_CREDIT_TRANSFER** (`TAG 29`), **ThaiQR_BILL_PAYMENT** (`TAG 30`)
 
@@ -261,5 +264,3 @@ print(QR_Generator.initQR("KHQR_Corporate").unparse(QRObj))
 
 ### [TP-Generator v2024.3.1](https://github.com/TPCyberSec/TP-Generator/tree/2024.3.1)
 - **New**: Generate test cases for attack types: **_Sniper_**, **_Battering Ram_**, **_Pitchfork_**, **_Cluster Bomb_**
-
----

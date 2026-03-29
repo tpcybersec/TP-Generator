@@ -49,22 +49,26 @@ def RandomString(length, charsets=None):
 
 def toUTF16(message, type="LE"):
 	retval = b""
+
 	for c in message:
 		if type == "LE":
 			retval += binascii.unhexlify(hex(ord(c))[2:].rjust(2, "0").ljust(4, "0"))
 		elif type == "BE":
 			retval += binascii.unhexlify(hex(ord(c))[2:].rjust(4, "0"))
-	return base64Encode(retval)
+
+	return retval
 
 
 def toUTF32(message, type="LE"):
 	retval = b""
+
 	for c in message:
 		if type == "LE":
 			retval += binascii.unhexlify(hex(ord(c))[2:].rjust(2, "0").ljust(8, "0"))
 		elif type == "BE":
 			retval += binascii.unhexlify(hex(ord(c))[2:].rjust(8, "0"))
-	return base64Encode(retval)
+
+	return retval
 
 
 def Str2Hex(message):
@@ -76,40 +80,28 @@ def Hex2Str(message):
 
 
 def base64Encode(message):
-	if type(message) in [str, unicode]: message = message.encode("utf8")
-
 	retval = base64.b64encode(message)
-	if type(retval) in [str, unicode]:
-		return retval
-	return retval.decode("utf8")
+
+	return retval
 
 
 def base64Decode(message):
-	if type(message) in [str, unicode]: message = message.encode("utf8")
-
 	retval = base64.b64decode(message)
-	if type(retval) in [str, unicode]:
-		return retval
-	return retval.decode("utf8")
+
+	return retval
 
 
 def base64UrlEncode(message):
-	if type(message) in [str, unicode]: message = message.encode("utf8")
-
 	retval = base64.urlsafe_b64encode(message).rstrip(b"=")
-	if type(retval) in [str, unicode]:
-		return retval
-	return retval.decode("utf8")
+
+	return retval
 
 
 def base64UrlDecode(message):
-	if type(message) in [str, unicode]: message = message.encode("utf8")
-
 	padding = b"=" * (4-(len(message)%4))
 	retval = base64.urlsafe_b64decode(message+padding)
-	if type(retval) in [str, unicode]:
-		return retval
-	return retval.decode("utf8")
+
+	return retval
 
 
 def UrlEncode(message):
