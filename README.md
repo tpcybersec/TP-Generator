@@ -23,7 +23,7 @@ pip install TP-Generator
 #### From Source:
 ```console
 git clone https://github.com/TPCyberSec/TP-Generator.git --branch <Branch/Tag>
-cd TP-TP-Generator
+cd TP-Generator
 python -m build
 python -m pip install dist/tp_generator-<version>-py3-none-any.whl
 ```
@@ -76,6 +76,21 @@ Utils.UrlEncode('TP Cyber Security')
 Utils.UrlDecode('TP%20Cyber%20Security')
 # OUTPUT: 'TP Cyber Security'
 
+xml_string = '''<?xml version="1.0" encoding="UTF-8"?>
+<note>
+  <to>Tove</to>
+  <from>Jani</from>
+  <heading>Reminder</heading>
+  <body>Don't forget me this weekend!</body>
+</note>'''
+
+json_object = Utils.XML2JSON(xml_string)
+print(json_object)
+# OUTPUT: {'note': {'to': {'#text': 'Tove'}, 'from': {'#text': 'Jani'}, 'heading': {'#text': 'Reminder'}, 'body': {'#text': "Don't forget me this weekend!"}}}
+
+xml_string = Utils.JSON2XML(json_object)
+print(xml_string)
+# OUTPUT: <?xml version="1.0" encoding="UTF-8"?><note><to>Tove</to><from>Jani</from><heading>Reminder</heading><body>Don&apos;t forget me this weekend!</body></note>
 ```
 
 ### Generating testcases for the Sniper attack
@@ -232,7 +247,10 @@ print(QR_Generator.initQR("KHQR_Corporate").unparse(QRObj))
 
 ---
 # 📝 CHANGELOG
-### [TP-Generator v2026.3.29](https://github.com/TPCyberSec/TP-Generator/tree/v2026.3.29)
+### [TP-Generator v2026.4.30](https://github.com/TPCyberSec/TP-Generator/tree/2026.4.30)
+- **New**: _Utils_: **XML2JSON**, **JSON2XML**
+
+### [TP-Generator v2026.3.29](https://github.com/TPCyberSec/TP-Generator/tree/2026.3.29)
 - **Updated**: **toUTF16**, **toUTF32**, **base64Encode**, **base64Decode**, **base64UrlEncode**, **base64UrlDecode** functions in _Utils_ module
 
 ### [TP-Generator v2025.10.7](https://github.com/TPCyberSec/TP-Generator/tree/2025.10.7)
