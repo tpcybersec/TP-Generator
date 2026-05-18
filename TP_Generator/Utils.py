@@ -10,6 +10,7 @@ import base64
 import random
 import string
 import binascii
+from collections import OrderedDict
 
 if platform.python_version_tuple()[0] == "3":
 	from urllib.parse import quote as urlencode, unquote as urldecode
@@ -45,6 +46,28 @@ def RandomString(length, charsets=None):
 		charsets = string.ascii_letters+string.digits+string.punctuation
 
 	return "".join(random.choice(charsets) for i in range(length))
+
+
+def toUTF8_Overlong(message, numBytes=2):
+	retval = b""
+
+	for c in message:
+		if numBytes == 2:
+			# 2 byte: 110xxxxx 10xxxxxx
+			codepoint = bin(ord(c))[2:].zfill(11)[-11:]
+			retval += binascii.unhexlify(hex(int("110"+codepoint[0:5],2))[2:]) + binascii.unhexlify(hex(int("10"+codepoint[5:11],2))[2:])
+		elif numBytes == 3:
+			# 3 byte: 1110xxxx 10xxxxxx 10xxxxxx
+			codepoint = bin(ord(c))[2:].zfill(16)[-16:]
+			retval += binascii.unhexlify(hex(int("1110"+codepoint[0:4],2))[2:]) + binascii.unhexlify(hex(int("10"+codepoint[4:10],2))[2:]) + binascii.unhexlify(hex(int("10"+codepoint[10:16],2))[2:])
+		elif numBytes == 4:
+			# 4 byte: 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx
+			codepoint = bin(ord(c))[2:].zfill(21)[-21:]
+			retval += binascii.unhexlify(hex(int("11110"+codepoint[0:3],2))[2:]) + binascii.unhexlify(hex(int("10"+codepoint[3:9],2))[2:]) + binascii.unhexlify(hex(int("10"+codepoint[9:15],2))[2:]) + binascii.unhexlify(hex(int("10"+codepoint[15:21],2))[2:])
+		else:
+			retval += binascii.unhexlify(hex(ord(c))[2:])
+
+	return retval
 
 
 def toUTF16(message, type="LE"):
@@ -112,185 +135,201 @@ def UrlDecode(message):
 	return urldecode(message)
 
 
-def XML2JSON(message):
-	if platform.python_version_tuple()[0] == "3":
-		# ===== Fallback Python (ElementTree) =====
-		import xml.etree.ElementTree as ET
-		try:
-			from io import StringIO
-		except:
-			from StringIO import StringIO
-
-		if not isinstance(message, str):
-			message = message.decode("utf-8")
-
-		uri2prefix = {}
-		prefix2uri = {}
-
-		for event, elem in ET.iterparse(StringIO(message), events=('start-ns',)):
-			prefix, uri = elem
-			uri2prefix[uri] = prefix
-			prefix2uri[prefix] = uri
-
-		root = ET.fromstring(message)
-
-		def qname(tag):
-			if tag.startswith("{"):
-				uri, local = tag[1:].split("}")
-				prefix = uri2prefix.get(uri)
-				return "%s:%s" % (prefix, local) if prefix else local
-			return tag
-
-		def parse(elem):
-			tag = qname(elem.tag)
-			node = {}
-
-			# ---- attributes ----
-			attrs = {}
-
-			# normal attributes
-			for k, v in elem.attrib.items():
-				if k.startswith("{"):
-					uri, local = k[1:].split("}")
-					prefix = uri2prefix.get(uri)
-					if prefix:
-						attrs["%s:%s" % (prefix, local)] = v
-					else:
-						attrs[local] = v
-				else:
-					attrs[k] = v
-
-			# ---- xmlns extraction from RAW STRING ----
-			# locate exact opening tag text
-			start = message.find("<" + tag)
-			if start != -1:
-				end = message.find(">", start)
-				raw_tag = message[start:end]
-
-				parts = raw_tag.split()
-				for p in parts:
-					if p.startswith("xmlns"):
-						if "=" in p:
-							k, v = p.split("=", 1)
-							v = v.strip('"').strip("'")
-							attrs[k] = v
-
-			# inject xmlns:xsi ONLY when xsi:* exists
-			if any(k.startswith("xsi:") for k in attrs):
-				if "xmlns:xsi" not in attrs and "xsi" in prefix2uri:
-					attrs["xmlns:xsi"] = prefix2uri["xsi"]
-
-			if attrs:
-				node["@attributes"] = attrs
-
-			# ---- children ----
-			children = {}
-			has_child = False
-
-			for child in elem:
-				has_child = True
-				child_tag = qname(child.tag)
-				child_obj = parse(child)[child_tag]
-
-				if child_tag in children:
-					if not isinstance(children[child_tag], list):
-						children[child_tag] = [children[child_tag]]
-					children[child_tag].append(child_obj)
-				else:
-					children[child_tag] = child_obj
-
-			if children:
-				node.update(children)
-
-			# ---- text ----
-			if not has_child:
-				text = elem.text
-				if text is None:
-					node["#text"] = ""
-				else:
-					node["#text"] = text.strip() if text.strip() else ""
-
-			return {tag: node}
-
-		return parse(root)
+def HTMLEncode(message, type="hex", padding=0):
+	if type == "dec":
+		return "".join(["&#"+"0"*padding+str(ord(i))+";" for i in message])
 	else:
-		# ===== Try Jython (Java DOM) =====
-		from javax.xml.parsers import DocumentBuilderFactory
-		from java.io import ByteArrayInputStream
+		return "".join(["&#x"+"0"*padding+"%02x"%ord(i)+";" for i in message])
 
-		if isinstance(message, unicode):
-			data = message.encode("utf-8")
-		else:
-			data = message
 
-		factory = DocumentBuilderFactory.newInstance()
-		factory.setNamespaceAware(True)
-		builder = factory.newDocumentBuilder()
-		doc = builder.parse(ByteArrayInputStream(data))
+def XML2JSON(message, ordered_dict=False):
+	if type(ordered_dict) is not bool: ordered_dict = False
 
-		def get_tag(node):
-			prefix = node.getPrefix()
-			local = node.getLocalName()
-			return "%s:%s" % (prefix, local) if prefix else local
+	if platform.python_version_tuple()[0] == "3":
+		try:
+			# ===== Fallback Python (ElementTree) =====
+			import xml.etree.ElementTree as ET
+			try:
+				from io import StringIO
+			except:
+				from StringIO import StringIO
 
-		def parse_node(node):
-			tag = get_tag(node)
-			node_obj = {}
+			if not isinstance(message, str):
+				message = message.decode("utf-8")
 
-			# attributes
-			attrs = {}
-			attr_map = node.getAttributes()
-			if attr_map:
-				for i in range(attr_map.getLength()):
-					attr = attr_map.item(i)
-					name = attr.getNodeName()
-					value = attr.getNodeValue()
+			uri2prefix = OrderedDict() if ordered_dict else {}
+			prefix2uri = OrderedDict() if ordered_dict else {}
 
-					# keep xmlns only at root or Response level
-					if name.startswith("xmlns"):
-						if node.getParentNode() and node.getParentNode().getNodeType() == node.DOCUMENT_NODE:
-							attrs[name] = value
-						elif tag.endswith("Response"):
-							attrs[name] = value
+			for event, elem in ET.iterparse(StringIO(message), events=('start-ns',)):
+				prefix, uri = elem
+				uri2prefix[uri] = prefix
+				prefix2uri[prefix] = uri
+
+			root = ET.fromstring(message)
+
+			def qname(tag):
+				if tag.startswith("{"):
+					uri, local = tag[1:].split("}")
+					prefix = uri2prefix.get(uri)
+					return "%s:%s" % (prefix, local) if prefix else local
+				return tag
+
+			def parse_node(elem):
+				tag = qname(elem.tag)
+				node_obj = OrderedDict() if ordered_dict else {}
+
+				# ---- attributes ----
+				attrs = OrderedDict() if ordered_dict else {}
+
+				# normal attributes
+				for k, v in elem.attrib.items():
+					if k.startswith("{"):
+						uri, local = k[1:].split("}")
+						prefix = uri2prefix.get(uri)
+						if prefix:
+							attrs["%s:%s" % (prefix, local)] = v
+						else:
+							attrs[local] = v
 					else:
-						attrs[name] = value
+						attrs[k] = v
 
-			if len(attrs) > 0:
-				node_obj["@attributes"] = attrs
+				# ---- xmlns extraction from RAW STRING ----
+				# locate exact opening tag text
+				start = message.find("<" + tag)
+				if start != -1:
+					end = message.find(">", start)
+					raw_tag = message[start:end]
 
-			# children
-			children = {}
-			has_child = False
+					parts = raw_tag.split()
+					for p in parts:
+						if p.startswith("xmlns"):
+							if "=" in p:
+								k, v = p.split("=", 1)
+								v = v.strip('"').strip("'")
+								attrs[k] = v
 
-			child_nodes = node.getChildNodes()
-			for i in range(child_nodes.getLength()):
-				child = child_nodes.item(i)
+				# inject xmlns:xsi ONLY when xsi:* exists
+				if any(k.startswith("xsi:") for k in attrs):
+					if "xmlns:xsi" not in attrs and "xsi" in prefix2uri:
+						attrs["xmlns:xsi"] = prefix2uri["xsi"]
 
-				if child.getNodeType() == child.ELEMENT_NODE:
+				if attrs:
+					node_obj["@attributes"] = attrs
+
+				# ---- children ----
+				children = OrderedDict() if ordered_dict else {}
+				has_child = False
+
+				for child in elem:
 					has_child = True
-
-					child_tag = get_tag(child)
-					child_data = parse_node(child)[child_tag]
+					child_tag = qname(child.tag)
+					child_obj = parse_node(child)[child_tag]
 
 					if child_tag in children:
 						if not isinstance(children[child_tag], list):
 							children[child_tag] = [children[child_tag]]
-						children[child_tag].append(child_data)
+						children[child_tag].append(child_obj)
 					else:
-						children[child_tag] = child_data
+						children[child_tag] = child_obj
 
-			if children:
-				node_obj.update(children)
+				if children:
+					node_obj.update(children)
 
-			# text
-			if not has_child:
-				text = node.getTextContent()
-				node_obj["#text"] = text.strip() if text else ""
+				# ---- text ----
+				if not has_child:
+					text = elem.text
+					if text is None:
+						node_obj["#text"] = ""
+					else:
+						node_obj["#text"] = text.strip() if text.strip() else ""
 
-			return {tag: node_obj}
+				return {tag: node_obj}
 
-		root = doc.getDocumentElement()
-		return parse_node(root)
+			return parse_node(root)
+		except Exception as e:
+			return False
+	else:
+		try:
+			# ===== Try Jython (Java DOM) =====
+			from java.lang import Exception as JavaException
+			from javax.xml.parsers import DocumentBuilderFactory
+			from java.io import ByteArrayInputStream
+
+			if isinstance(message, unicode):
+				data = message.encode("utf-8")
+			else:
+				data = message
+
+			factory = DocumentBuilderFactory.newInstance()
+			factory.setNamespaceAware(True)
+			builder = factory.newDocumentBuilder()
+			doc = builder.parse(ByteArrayInputStream(data))
+
+			def get_tag(node):
+				prefix = node.getPrefix()
+				local = node.getLocalName()
+				return "%s:%s" % (prefix, local) if prefix else local
+
+			def parse_node(node):
+				tag = get_tag(node)
+				node_obj = OrderedDict() if ordered_dict else {}
+
+				# attributes
+				attrs = OrderedDict() if ordered_dict else {}
+				attr_map = node.getAttributes()
+				if attr_map:
+					for i in range(attr_map.getLength()):
+						attr = attr_map.item(i)
+						name = attr.getNodeName()
+						value = attr.getNodeValue()
+
+						# keep xmlns only at root or Response level
+						if name.startswith("xmlns"):
+							if node.getParentNode() and node.getParentNode().getNodeType() == node.DOCUMENT_NODE:
+								attrs[name] = value
+							elif tag.endswith("Response"):
+								attrs[name] = value
+						else:
+							attrs[name] = value
+
+				if len(attrs) > 0:
+					node_obj["@attributes"] = attrs
+
+				# children
+				children = OrderedDict() if ordered_dict else {}
+				has_child = False
+
+				child_nodes = node.getChildNodes()
+				for i in range(child_nodes.getLength()):
+					child = child_nodes.item(i)
+
+					if child.getNodeType() == child.ELEMENT_NODE:
+						has_child = True
+
+						child_tag = get_tag(child)
+						child_data = parse_node(child)[child_tag]
+
+						if child_tag in children:
+							if not isinstance(children[child_tag], list):
+								children[child_tag] = [children[child_tag]]
+							children[child_tag].append(child_data)
+						else:
+							children[child_tag] = child_data
+
+				if children:
+					node_obj.update(children)
+
+				# text
+				if not has_child:
+					text = node.getTextContent()
+					node_obj["#text"] = text.strip() if text else ""
+
+				return {tag: node_obj}
+
+			root = doc.getDocumentElement()
+			return parse_node(root)
+		except (Exception, JavaException) as e:
+			return False
 
 
 def JSON2XML(message):

@@ -46,6 +46,9 @@ Utils.RandomNumber(0, 1000)
 Utils.RandomString(10)
 # OUTPUT: 'Wz<:1<.YSC'
 
+Utils.toUTF8_Overlong('TPCyberSec', numBytes=2)
+# OUTPUT: b'\xc1\x94\xc1\x90\xc1\x83\xc1\xb9\xc1\xa2\xc1\xa5\xc1\xb2\xc1\x93\xc1\xa5\xc1\xa3'
+
 Utils.toUTF16('TPCyberSec')
 # OUTPUT: b'T\x00P\x00C\x00y\x00b\x00e\x00r\x00S\x00e\x00c\x00'
 
@@ -75,6 +78,12 @@ Utils.UrlEncode('TP Cyber Security')
 
 Utils.UrlDecode('TP%20Cyber%20Security')
 # OUTPUT: 'TP Cyber Security'
+
+Utils.HTMLEncode('TPCyberSec')
+# OUTPUT: '&#x54;&#x50;&#x43;&#x79;&#x62;&#x65;&#x72;&#x53;&#x65;&#x63;'
+
+Utils.HTMLEncode('TPCyberSec', type="dec")
+# OUTPUT: '&#84;&#80;&#67;&#121;&#98;&#101;&#114;&#83;&#101;&#99;'
 
 xml_string = '''<?xml version="1.0" encoding="UTF-8"?>
 <note>
@@ -247,6 +256,10 @@ print(QR_Generator.initQR("KHQR_Corporate").unparse(QRObj))
 
 ---
 # 📝 CHANGELOG
+### [TP-Generator v2026.5.18](https://github.com/TPCyberSec/TP-Generator/tree/2026.5.18)
+- **New**: _Utils_: **HTMLEncode**, **toUTF8_Overlong**
+- **Updated**: Preserve the order of keys when parsing from XML to JSON by setting the `ordered_dict` parameter to `True`
+
 ### [TP-Generator v2026.4.30](https://github.com/TPCyberSec/TP-Generator/tree/2026.4.30)
 - **New**: _Utils_: **XML2JSON**, **JSON2XML**
 
@@ -282,3 +295,5 @@ print(QR_Generator.initQR("KHQR_Corporate").unparse(QRObj))
 
 ### [TP-Generator v2024.3.1](https://github.com/TPCyberSec/TP-Generator/tree/2024.3.1)
 - **New**: Generate test cases for attack types: **_Sniper_**, **_Battering Ram_**, **_Pitchfork_**, **_Cluster Bomb_**
+
+---
