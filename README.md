@@ -100,6 +100,11 @@ print(json_object)
 xml_string = Utils.JSON2XML(json_object)
 print(xml_string)
 # OUTPUT: <?xml version="1.0" encoding="UTF-8"?><note><to>Tove</to><from>Jani</from><heading>Reminder</heading><body>Don&apos;t forget me this weekend!</body></note>
+
+ProtoData = "AAAAAEwIz///////////ARI4SOG7hyB0aOG7kW5nIMSRYW5nIGPDsyBs4buXaSwgdnVpIGzDsm5nIHRo4butIGzhuqFpIHNhdSEwAVgGyAEB"
+json_object = Utils.Protobuf2JSON(ProtoData, keyName_mapping={"1":{"name":"status"},"2":{"name":"message"}})
+print(json_object.dumps())
+# OUTPUT: {"status": -49, "message": "H\u1ec7 th\u1ed1ng \u0111ang c\u00f3 l\u1ed7i, vui l\u00f2ng th\u1eed l\u1ea1i sau!", "6": 1, "11": 6, "25": 1}
 ```
 
 ### Generating testcases for the Sniper attack
@@ -256,6 +261,10 @@ print(QR_Generator.initQR("KHQR_Corporate").unparse(QRObj))
 
 ---
 # 📝 CHANGELOG
+### [TP-Generator v2026.11.18](https://github.com/TPCyberSec/TP-Generator/tree/2026.11.18)
+- **New**: _Utils_: **Protobuf2JSON**
+- **Fixed**: an unexpected keyword argument 'ordered_dict' when initializing the QR object in _QR_Generator_ module
+
 ### [TP-Generator v2026.5.18](https://github.com/TPCyberSec/TP-Generator/tree/2026.5.18)
 - **New**: _Utils_: **HTMLEncode**, **toUTF8_Overlong**
 - **Updated**: Preserve the order of keys when parsing from XML to JSON by setting the `ordered_dict` parameter to `True`

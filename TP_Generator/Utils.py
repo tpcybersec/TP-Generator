@@ -3,7 +3,7 @@ try:
 except NameError:
 	unicode = str # Python 3
 
-import platform
+import platform, struct
 import time
 import uuid as _uuid
 import base64
@@ -11,6 +11,7 @@ import random
 import string
 import binascii
 from collections import OrderedDict
+import json_duplicate_keys as jdks
 
 if platform.python_version_tuple()[0] == "3":
 	from urllib.parse import quote as urlencode, unquote as urldecode
@@ -378,3 +379,81 @@ def JSON2XML(message):
 	xml_body = build(root_tag, message[root_tag])
 
 	return '<?xml version="1.0" encoding="UTF-8"?>' + xml_body
+
+
+def Protobuf2JSON(message, Coding="utf-8", keyName_mapping={}, protoData=None):
+	def read_varint(data):
+		value = 0
+		shift = 0
+
+		while True:
+			b = (data[0] if isinstance(data[0], int) else ord(data[0])); data = data[1:]
+			value |= (b & 0x7F) << shift
+			if not (b & 0x80):
+				break
+			shift += 7
+
+		return value, data
+
+	if protoData is None:
+		protoData = base64.b64decode(message)
+		flag = protoData[0]; protoData = protoData[1:]
+
+		protoLen = struct.unpack(">I", protoData[:4])[0]; protoData = protoData[4:]
+		if protoLen != len(protoData):
+			return False
+
+	if type(keyName_mapping) is not dict: keyName_mapping = {}
+	retval = jdks.loads("{}", ordered_dict=True)
+
+	while len(protoData) > 0:
+		key, protoData = read_varint(protoData)
+		fieldNum = str(key >> 3)
+		fieldName = keyName_mapping.get(fieldNum,{}).get("name",fieldNum)
+		wireType = key & 0x07
+
+		if wireType == 0: # varint
+			value, protoData = read_varint(protoData)
+
+			value = struct.pack("<Q", value)
+			value = struct.unpack("<q", value)[0]
+
+			retval.set(fieldName, value)
+
+		elif wireType == 2: # length-delimited
+			length, protoData = read_varint(protoData)
+
+			if length > len(protoData):
+				return False
+
+			value = protoData[:length]; protoData = protoData[length:]
+
+			if retval.get(fieldName)["value"] == "JSON_DUPLICATE_KEYS_ERROR":
+				sub_keyName_mapping = keyName_mapping.get(fieldNum,{}).get("subNames",{})
+				if sub_keyName_mapping.get("$1$",False):
+					sub_keyName_mapping = sub_keyName_mapping.get("$1$",{})
+			elif type(retval.get(fieldName)["value"]) == list:
+				sub_keyName_mapping = keyName_mapping.get(fieldNum,{}).get("subNames",{}).get("$"+str(len((retval.get(fieldName)["value"]))+1)+"$",{})
+			else:
+				sub_keyName_mapping = keyName_mapping.get(fieldNum,{}).get("subNames",{})
+				if sub_keyName_mapping.get("$2$",False):
+					sub_keyName_mapping = sub_keyName_mapping.get("$2$",{})
+
+			nestedMessage = Protobuf2JSON(None, Coding=Coding, keyName_mapping=sub_keyName_mapping, protoData=value)
+			if nestedMessage is False:
+				value = value.decode(Coding)
+			else:
+				value = nestedMessage.getObject()
+
+			if retval.get(fieldName)["value"] == "JSON_DUPLICATE_KEYS_ERROR":
+				retval.set(fieldName, value)
+			elif type(retval.get(fieldName)["value"]) == list:
+				retval.insert(fieldName, value)
+			else:
+				prev_value = retval.get(fieldName)["value"]
+				retval.update(fieldName, [prev_value, value])
+
+		else:
+			return False
+
+	return retval

@@ -5,84 +5,84 @@ class initQR:
 		self.QR_Type = QR_Type
 		self.QR = jdks.loads("{}", ordered_dict=True)
 
-		self.QR.set("00", jdks.loads('{ "name":"PayloadFormatIndicator", "value":"" }', ordered_dict=True).getObject())
-		self.QR.set("01", jdks.loads('{ "name":"PointOfInitiationMethod", "value":"" }', ordered_dict=True).getObject())
+		self.QR.set("00", jdks.loads('{ "name":"PayloadFormatIndicator", "value":"" }').getObject())
+		self.QR.set("01", jdks.loads('{ "name":"PointOfInitiationMethod", "value":"" }').getObject())
 
 
 		if self.QR_Type == "VNPAYQR":
-			self.QR.set("26", jdks.loads('{ "name":"MerchantAccountInformation", "value":"", "subTag":{} }', ordered_dict=True).getObject())
-			self.QR.set("26||subTag||00", jdks.loads('{ "name":"GUID", "value":"" }', ordered_dict=True).getObject())
-			self.QR.set("26||subTag||01", jdks.loads('{ "name":"MerchantID", "value":"" }', ordered_dict=True).getObject())
+			self.QR.set("26", jdks.loads('{ "name":"MerchantAccountInformation", "value":"", "subTag":{} }').getObject())
+			self.QR.set("26||subTag||00", jdks.loads('{ "name":"GUID", "value":"" }',).getObject())
+			self.QR.set("26||subTag||01", jdks.loads('{ "name":"MerchantID", "value":"" }').getObject())
 
 		elif self.QR_Type in ["VietQR", "MoMo"]:
-			self.QR.set("38", jdks.loads('{ "name":"MerchantAccountInformation", "value":"", "subTag":{} }', ordered_dict=True).getObject())
-			self.QR.set("38||subTag||00", jdks.loads('{ "name":"GUID", "value":"" }', ordered_dict=True).getObject())
-			self.QR.set("38||subTag||01", jdks.loads('{ "name":"BeneficiaryOrganization", "value":"", "subTag":{} }', ordered_dict=True).getObject())
-			self.QR.set("38||subTag||01||subTag||00", jdks.loads('{ "name":"BeneficiaryID", "value":"" }', ordered_dict=True).getObject())
-			self.QR.set("38||subTag||01||subTag||01", jdks.loads('{ "name":"ReceiverNumber", "value":"" }', ordered_dict=True).getObject())
-			self.QR.set("38||subTag||02", jdks.loads('{ "name":"ServiceCode", "value":"" }', ordered_dict=True).getObject())
+			self.QR.set("38", jdks.loads('{ "name":"MerchantAccountInformation", "value":"", "subTag":{} }').getObject())
+			self.QR.set("38||subTag||00", jdks.loads('{ "name":"GUID", "value":"" }').getObject())
+			self.QR.set("38||subTag||01", jdks.loads('{ "name":"BeneficiaryOrganization", "value":"", "subTag":{} }').getObject())
+			self.QR.set("38||subTag||01||subTag||00", jdks.loads('{ "name":"BeneficiaryID", "value":"" }').getObject())
+			self.QR.set("38||subTag||01||subTag||01", jdks.loads('{ "name":"ReceiverNumber", "value":"" }').getObject())
+			self.QR.set("38||subTag||02", jdks.loads('{ "name":"ServiceCode", "value":"" }').getObject())
 
 		elif self.QR_Type == "KHQR_Individual":
-			self.QR.set("29", jdks.loads('{ "name":"MerchantAccountInformation", "value":"", "subTag":{} }', ordered_dict=True).getObject())
-			self.QR.set("29||subTag||00", jdks.loads('{ "name":"BakongAccountID", "value":"" }', ordered_dict=True).getObject())
-			self.QR.set("29||subTag||01", jdks.loads('{ "name":"AccountInformation", "value":"" }', ordered_dict=True).getObject())
-			self.QR.set("29||subTag||02", jdks.loads('{ "name":"AcquiringBank", "value":"" }', ordered_dict=True).getObject())
+			self.QR.set("29", jdks.loads('{ "name":"MerchantAccountInformation", "value":"", "subTag":{} }').getObject())
+			self.QR.set("29||subTag||00", jdks.loads('{ "name":"BakongAccountID", "value":"" }').getObject())
+			self.QR.set("29||subTag||01", jdks.loads('{ "name":"AccountInformation", "value":"" }').getObject())
+			self.QR.set("29||subTag||02", jdks.loads('{ "name":"AcquiringBank", "value":"" }').getObject())
 
 		elif self.QR_Type == "KHQR_Corporate":
-			self.QR.set("30", jdks.loads('{ "name":"MerchantAccountInformation", "value":"", "subTag":{} }', ordered_dict=True).getObject())
-			self.QR.set("30||subTag||00", jdks.loads('{ "name":"BakongAccountID", "value":"" }', ordered_dict=True).getObject())
-			self.QR.set("30||subTag||01", jdks.loads('{ "name":"MerchantID", "value":"" }', ordered_dict=True).getObject())
-			self.QR.set("30||subTag||02", jdks.loads('{ "name":"AcquiringBank", "value":"" }', ordered_dict=True).getObject())
-		
+			self.QR.set("30", jdks.loads('{ "name":"MerchantAccountInformation", "value":"", "subTag":{} }').getObject())
+			self.QR.set("30||subTag||00", jdks.loads('{ "name":"BakongAccountID", "value":"" }').getObject())
+			self.QR.set("30||subTag||01", jdks.loads('{ "name":"MerchantID", "value":"" }').getObject())
+			self.QR.set("30||subTag||02", jdks.loads('{ "name":"AcquiringBank", "value":"" }').getObject())
+
 		elif self.QR_Type == "ThaiQR_CREDIT_TRANSFER":
-			self.QR.set("29", jdks.loads('{ "name":"MerchantAccountInformation", "value":"", "subTag":{} }', ordered_dict=True).getObject())
-			self.QR.set("29||subTag||00", jdks.loads('{ "name":"AID", "value":"" }', ordered_dict=True).getObject())
-			self.QR.set("29||subTag||01", jdks.loads('{ "name":"PhoneNumber", "value":"" }', ordered_dict=True).getObject())
-			self.QR.set("29||subTag||02", jdks.loads('{ "name":"NationalID_or_TaxID", "value":"" }', ordered_dict=True).getObject())
-			self.QR.set("29||subTag||03", jdks.loads('{ "name":"eWalletID", "value":"" }', ordered_dict=True).getObject())
-			self.QR.set("29||subTag||04", jdks.loads('{ "name":"BankAccount", "value":"" }', ordered_dict=True).getObject())
-			self.QR.set("29||subTag||05", jdks.loads('{ "name":"OTA", "value":"" }', ordered_dict=True).getObject())
+			self.QR.set("29", jdks.loads('{ "name":"MerchantAccountInformation", "value":"", "subTag":{} }').getObject())
+			self.QR.set("29||subTag||00", jdks.loads('{ "name":"AID", "value":"" }').getObject())
+			self.QR.set("29||subTag||01", jdks.loads('{ "name":"PhoneNumber", "value":"" }').getObject())
+			self.QR.set("29||subTag||02", jdks.loads('{ "name":"NationalID_or_TaxID", "value":"" }').getObject())
+			self.QR.set("29||subTag||03", jdks.loads('{ "name":"eWalletID", "value":"" }').getObject())
+			self.QR.set("29||subTag||04", jdks.loads('{ "name":"BankAccount", "value":"" }').getObject())
+			self.QR.set("29||subTag||05", jdks.loads('{ "name":"OTA", "value":"" }').getObject())
 
 		elif self.QR_Type == "ThaiQR_BILL_PAYMENT":
-			self.QR.set("30", jdks.loads('{ "name":"MerchantAccountInformation", "value":"", "subTag":{} }', ordered_dict=True).getObject())
-			self.QR.set("30||subTag||00", jdks.loads('{ "name":"AID", "value":"" }', ordered_dict=True).getObject())
-			self.QR.set("30||subTag||01", jdks.loads('{ "name":"BillerID", "value":"" }', ordered_dict=True).getObject())
-			self.QR.set("30||subTag||02", jdks.loads('{ "name":"Reference_1", "value":"" }', ordered_dict=True).getObject())
-			self.QR.set("30||subTag||03", jdks.loads('{ "name":"Reference_2", "value":"" }', ordered_dict=True).getObject())
+			self.QR.set("30", jdks.loads('{ "name":"MerchantAccountInformation", "value":"", "subTag":{} }').getObject())
+			self.QR.set("30||subTag||00", jdks.loads('{ "name":"AID", "value":"" }').getObject())
+			self.QR.set("30||subTag||01", jdks.loads('{ "name":"BillerID", "value":"" }').getObject())
+			self.QR.set("30||subTag||02", jdks.loads('{ "name":"Reference_1", "value":"" }').getObject())
+			self.QR.set("30||subTag||03", jdks.loads('{ "name":"Reference_2", "value":"" }').getObject())
 
 
-		self.QR.set("52", jdks.loads('{ "name":"MerchantCategoryCode", "value":"" }', ordered_dict=True).getObject())
-		self.QR.set("53", jdks.loads('{ "name":"TransactionCurrency", "value":"" }', ordered_dict=True).getObject())
-		self.QR.set("54", jdks.loads('{ "name":"TransactionAmount", "value":"" }', ordered_dict=True).getObject())
-		self.QR.set("55", jdks.loads('{ "name":"TipOrConvenienceIndicator", "value":"" }', ordered_dict=True).getObject())
-		self.QR.set("56", jdks.loads('{ "name":"ValueOfConvenienceFeeFixed", "value":"" }', ordered_dict=True).getObject())
-		self.QR.set("57", jdks.loads('{ "name":"ValueOfConvenienceFeePercentage", "value":"" }', ordered_dict=True).getObject())
-		self.QR.set("58", jdks.loads('{ "name":"CountryCode", "value":"" }', ordered_dict=True).getObject())
-		self.QR.set("59", jdks.loads('{ "name":"MerchantName", "value":"" }', ordered_dict=True).getObject())
-		self.QR.set("60", jdks.loads('{ "name":"MerchantCity", "value":"" }', ordered_dict=True).getObject())
-		self.QR.set("61", jdks.loads('{ "name":"PostalCode", "value":"" }', ordered_dict=True).getObject())
-		self.QR.set("62", jdks.loads('{ "name":"AdditionalDataFieldTemplate", "value":"", "subTag":{} }', ordered_dict=True).getObject())
-		self.QR.set("62||subTag||01", jdks.loads('{ "name":"BillNumber", "value":"" }', ordered_dict=True).getObject())
-		self.QR.set("62||subTag||02", jdks.loads('{ "name":"MobileNumber", "value":"" }', ordered_dict=True).getObject())
-		self.QR.set("62||subTag||03", jdks.loads('{ "name":"StoreLabel", "value":"" }', ordered_dict=True).getObject())
-		self.QR.set("62||subTag||04", jdks.loads('{ "name":"LoyaltyNumber", "value":"" }', ordered_dict=True).getObject())
-		self.QR.set("62||subTag||05", jdks.loads('{ "name":"ReferenceLabel", "value":"" }', ordered_dict=True).getObject())
-		self.QR.set("62||subTag||06", jdks.loads('{ "name":"CustomerLabel", "value":"" }', ordered_dict=True).getObject())
-		self.QR.set("62||subTag||07", jdks.loads('{ "name":"TerminalLabel", "value":"" }', ordered_dict=True).getObject())
-		self.QR.set("62||subTag||08", jdks.loads('{ "name":"PurposeOfTransaction", "value":"" }', ordered_dict=True).getObject())
-		self.QR.set("62||subTag||09", jdks.loads('{ "name":"AdditionalConsumerDataRequest", "value":"" }', ordered_dict=True).getObject())
-		self.QR.set("63", jdks.loads('{ "name":"CRC", "value":"" }', ordered_dict=True).getObject())
-		self.QR.set("64", jdks.loads('{ "name":"MerchantInformation_LanguageTemplate", "value":"", "subTag":{} }', ordered_dict=True).getObject())
-		self.QR.set("64||subTag||00", jdks.loads('{ "name":"LanguagePreference", "value":"" }', ordered_dict=True).getObject())
-		self.QR.set("64||subTag||01", jdks.loads('{ "name":"MerchantName_AlternateLanguage", "value":"" }', ordered_dict=True).getObject())
-		self.QR.set("64||subTag||02", jdks.loads('{ "name":"MerchantCity_AlternateLanguage", "value":"" }', ordered_dict=True).getObject())
+		self.QR.set("52", jdks.loads('{ "name":"MerchantCategoryCode", "value":"" }').getObject())
+		self.QR.set("53", jdks.loads('{ "name":"TransactionCurrency", "value":"" }').getObject())
+		self.QR.set("54", jdks.loads('{ "name":"TransactionAmount", "value":"" }').getObject())
+		self.QR.set("55", jdks.loads('{ "name":"TipOrConvenienceIndicator", "value":"" }').getObject())
+		self.QR.set("56", jdks.loads('{ "name":"ValueOfConvenienceFeeFixed", "value":"" }').getObject())
+		self.QR.set("57", jdks.loads('{ "name":"ValueOfConvenienceFeePercentage", "value":"" }').getObject())
+		self.QR.set("58", jdks.loads('{ "name":"CountryCode", "value":"" }').getObject())
+		self.QR.set("59", jdks.loads('{ "name":"MerchantName", "value":"" }').getObject())
+		self.QR.set("60", jdks.loads('{ "name":"MerchantCity", "value":"" }').getObject())
+		self.QR.set("61", jdks.loads('{ "name":"PostalCode", "value":"" }').getObject())
+		self.QR.set("62", jdks.loads('{ "name":"AdditionalDataFieldTemplate", "value":"", "subTag":{} }').getObject())
+		self.QR.set("62||subTag||01", jdks.loads('{ "name":"BillNumber", "value":"" }').getObject())
+		self.QR.set("62||subTag||02", jdks.loads('{ "name":"MobileNumber", "value":"" }').getObject())
+		self.QR.set("62||subTag||03", jdks.loads('{ "name":"StoreLabel", "value":"" }').getObject())
+		self.QR.set("62||subTag||04", jdks.loads('{ "name":"LoyaltyNumber", "value":"" }').getObject())
+		self.QR.set("62||subTag||05", jdks.loads('{ "name":"ReferenceLabel", "value":"" }').getObject())
+		self.QR.set("62||subTag||06", jdks.loads('{ "name":"CustomerLabel", "value":"" }').getObject())
+		self.QR.set("62||subTag||07", jdks.loads('{ "name":"TerminalLabel", "value":"" }').getObject())
+		self.QR.set("62||subTag||08", jdks.loads('{ "name":"PurposeOfTransaction", "value":"" }').getObject())
+		self.QR.set("62||subTag||09", jdks.loads('{ "name":"AdditionalConsumerDataRequest", "value":"" }').getObject())
+		self.QR.set("63", jdks.loads('{ "name":"CRC", "value":"" }').getObject())
+		self.QR.set("64", jdks.loads('{ "name":"MerchantInformation_LanguageTemplate", "value":"", "subTag":{} }').getObject())
+		self.QR.set("64||subTag||00", jdks.loads('{ "name":"LanguagePreference", "value":"" }').getObject())
+		self.QR.set("64||subTag||01", jdks.loads('{ "name":"MerchantName_AlternateLanguage", "value":"" }').getObject())
+		self.QR.set("64||subTag||02", jdks.loads('{ "name":"MerchantCity_AlternateLanguage", "value":"" }').getObject())
 
 		if self.QR_Type == "MoMo":
-			self.QR.set("80", jdks.loads('{ "name":"LastThreeDigitsOfPhoneNumber", "value":"" }', ordered_dict=True).getObject())
+			self.QR.set("80", jdks.loads('{ "name":"LastThreeDigitsOfPhoneNumber", "value":"" }').getObject())
 
 		if self.QR_Type in ["KHQR_Individual", "KHQR_Corporate"]:
-			self.QR.set("99", jdks.loads('{ "name":"Timestamp", "value":"", "subTag":{} }', ordered_dict=True).getObject())
-			self.QR.set("99||subTag||00", jdks.loads('{ "name":"timestamp", "value":"" }', ordered_dict=True).getObject())
+			self.QR.set("99", jdks.loads('{ "name":"Timestamp", "value":"", "subTag":{} }').getObject())
+			self.QR.set("99||subTag||00", jdks.loads('{ "name":"timestamp", "value":"" }').getObject())
 
 
 		UnknownFields = jdks.JSON_DUPLICATE_KEYS(UnknownFields).filter_keys("^\\d+\\|\\|(?:subTag\\|\\|\\d+\\|\\|)*name$").getObject()
@@ -101,7 +101,7 @@ class initQR:
 				VALUE = QR_String[:LENGTH]; QR_String = QR_String[LENGTH:]
 
 				if self.QR.get(currentKey+TAG)["value"] == "JSON_DUPLICATE_KEYS_ERROR":
-					self.QR.set(currentKey+TAG, jdks.loads('{ "name":"UnknownField", "value":"'+TAG+LENGTH_STR+VALUE+'" }', ordered_dict=True).getObject())
+					self.QR.set(currentKey+TAG, jdks.loads('{ "name":"UnknownField", "value":"'+TAG+LENGTH_STR+VALUE+'" }').getObject())
 				else:
 					self.QR.update(currentKey+TAG+"||value", VALUE)
 					if self.QR.get(currentKey+TAG+"||subTag")["value"] != "JSON_DUPLICATE_KEYS_ERROR":
@@ -128,9 +128,9 @@ class initQR:
 					QRObj_kName.append(name)
 					if len(value) > 0:
 						if len(tags) == 1 or i == len(tags)-1:
-							QRObj.update("||".join(QRObj_kName), value, allow_new_key=True, ordered_dict=True)
+							QRObj.update("||".join(QRObj_kName), value, allow_new_key=True)
 						elif type(QRObj.get("||".join(QRObj_kName))["value"]) != dict:
-							QRObj.update("||".join(QRObj_kName), {}, allow_new_key=True, ordered_dict=True)
+							QRObj.update("||".join(QRObj_kName), {}, allow_new_key=True)
 			return QRObj
 
 
